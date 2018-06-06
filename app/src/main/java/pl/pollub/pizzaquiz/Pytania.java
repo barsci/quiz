@@ -21,10 +21,7 @@ public class Pytania extends AppCompatActivity {
     int nr_pytania = 0;
     MediaPlayer sound;
     boolean flaga=false;
-    RadioButton tab[] = new RadioButton[4];
-    TextView tv1;
-    ImageView iv1;
-    String odp;
+    ButtonManagement buttonManagement;
     List<QuizQuestion> pytania;
 
     @Override
@@ -32,16 +29,23 @@ public class Pytania extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pytania);
 
-        tab[0] = (RadioButton) findViewById(R.id.rb1);
-        tab[1] = (RadioButton) findViewById(R.id.rb2);
-        tab[2] = (RadioButton) findViewById(R.id.rb3);
-        tab[3] = (RadioButton) findViewById(R.id.rb4);
-        tv1 = (TextView) findViewById(R.id.tv1);
-        iv1 = (ImageView) findViewById(R.id.imageView);
+        RadioButton[] radioButtonstab = {(RadioButton) findViewById(R.id.rb1),
+                (RadioButton) findViewById(R.id.rb2),
+                (RadioButton) findViewById(R.id.rb3),
+                (RadioButton) findViewById(R.id.rb4)};
+        TextView tvQuestion = (TextView) findViewById(R.id.tv1);
+        TextView tvQuestionNumber = (TextView) findViewById(R.id.textView);
+        ImageView questionPicture = (ImageView) findViewById(R.id.imageView);
+        Button nextQuestion = (Button) findViewById(R.id.button);
+        Button checkQuestion = (Button) findViewById(R.id.button2);
+        RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup2);
 
+        buttonManagement = new ButtonManagement(radioButtonstab, rg, tvQuestionNumber,
+                tvQuestion, questionPicture, nextQuestion, checkQuestion);
         BazaPytan bazaPytan = new BazaPytan();
+
         pytania = bazaPytan.losujPytania(bazaPytan.getListaPytan());
-        pytania.get(nr_pytania).wyswietl(tab, tv1, iv1);
+        pytania.get(nr_pytania).wyswietl(buttonManagement);
     }
 
     public void odpowiedz(View view) {
@@ -55,21 +59,18 @@ public class Pytania extends AppCompatActivity {
         nr_pytania++;
         if (nr_pytania<=9)
         {
-            Button btn = (Button) findViewById(R.id.button2);
-            TextView tv = (TextView) findViewById(R.id.textView);
-            RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup2);
-            rg.clearCheck();
+            buttonManagement.getRadioGroup().clearCheck();
 
-            btn.setBackgroundColor(Color.LTGRAY);
+            buttonManagement.getCheckQuestion().setBackgroundColor(Color.LTGRAY);
 
             nr++;
-            tv.setText("Pytanie nr "+ nr);
+            buttonManagement.getQuestionNumber().setText("Pytanie nr "+ nr);
             if(nr_pytania>=9)
             {
                 Button button = (Button) findViewById(R.id.button);
                 button.setText("Zakończ");
             }
-            pytania.get(nr_pytania).wyswietl(tab, tv1, iv1);
+            pytania.get(nr_pytania).wyswietl(buttonManagement);
             flaga=false;
         }
         else
@@ -82,27 +83,25 @@ public class Pytania extends AppCompatActivity {
     }
 
     public boolean sprawdzodp() {
-        RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup2);
-        RadioButton rb = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
-        odp = rb.getText().toString();
+        RadioButton rb = (RadioButton) findViewById(buttonManagement.getRadioGroup().getCheckedRadioButtonId());
+        String odp = rb.getText().toString();
         return pytania.get(nr_pytania).sprawdzOdpowiedz(odp);
     }
 
     public void dzwiek(View view) {
-        Button btn = (Button) findViewById(R.id.button2);
         if (sound != null) {
             sound.reset();
             sound.release();
         }
         if (sprawdzodp()) {
             sound = MediaPlayer.create(this,R.raw.dobrze);
-            btn.setBackgroundColor(Color.GREEN);
+            buttonManagement.getCheckQuestion().setBackgroundColor(Color.GREEN);
             wynik++;
             sound.start();
         }
         else {
             sound = MediaPlayer.create(this,R.raw.zle);
-            btn.setBackgroundColor(Color.RED);
+            buttonManagement.getCheckQuestion().setBackgroundColor(Color.RED);
             sound.start();
         }
     }

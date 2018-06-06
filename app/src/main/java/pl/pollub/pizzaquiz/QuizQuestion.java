@@ -16,13 +16,13 @@ public class QuizQuestion extends AppCompatActivity{
         return (this.poprawna.equals(odpowiedz));
     }
 
-    void wyswietl(RadioButton tab[], TextView tv, ImageView iv) {
-        tab[0].setText(odpowiedz.getOdpowiedz1());
-        tab[1].setText(odpowiedz.getOdpowiedz2());
-        tab[2].setText(odpowiedz.getOdpowiedz3());
-        tab[3].setText(odpowiedz.getOdpowiedz4());
-        tv.setText(pytanie);
-        iv.setImageResource(obrazek);
+    void wyswietl(ButtonManagement buttonManagement) {
+        buttonManagement.getRadioButtonAnswers()[0].setText(odpowiedz.getOdpowiedz1());
+        buttonManagement.getRadioButtonAnswers()[1].setText(odpowiedz.getOdpowiedz2());
+        buttonManagement.getRadioButtonAnswers()[2].setText(odpowiedz.getOdpowiedz3());
+        buttonManagement.getRadioButtonAnswers()[3].setText(odpowiedz.getOdpowiedz4());
+        buttonManagement.getQuestion().setText(pytanie);
+        buttonManagement.getQuestionPicture().setImageResource(obrazek);
     }
 
     void setPytanie(String pytanie) {
