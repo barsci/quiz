@@ -7,8 +7,7 @@ import android.widget.TextView;
 
 public class QuizQuestion extends AppCompatActivity{
     private String pytanie;
-    //private String odpowiedzi[];
-    private Odpowiedzi odpowiedz;
+    private String[] odpowiedzi;
     private String poprawna;
     private int obrazek;
 
@@ -17,11 +16,9 @@ public class QuizQuestion extends AppCompatActivity{
     }
 
     void wyswietl(ButtonManagement buttonManagement) {
-        buttonManagement.getRadioButtonAnswers()[0].setText(odpowiedz.getOdpowiedz1());
-        buttonManagement.getRadioButtonAnswers()[1].setText(odpowiedz.getOdpowiedz2());
-        buttonManagement.getRadioButtonAnswers()[2].setText(odpowiedz.getOdpowiedz3());
-        buttonManagement.getRadioButtonAnswers()[3].setText(odpowiedz.getOdpowiedz4());
-        buttonManagement.getQuestion().setText(pytanie);
+        for(int i=0;i<4;i++)
+            buttonManagement.getRadioButtonAnswers()[i].setText(this.odpowiedzi[i]);
+        buttonManagement.getQuestionTextView().setText(pytanie);
         buttonManagement.getQuestionPicture().setImageResource(obrazek);
     }
 
@@ -29,9 +26,10 @@ public class QuizQuestion extends AppCompatActivity{
         this.pytanie = pytanie;
     }
 
-    void setOdpowiedzi(Odpowiedzi odpowiedz) {
-        this.odpowiedz=odpowiedz;
+    void setOdpowiedzi(String[] odpowiedzi) {
+        this.odpowiedzi=odpowiedzi;
     }
+
     void setPoprawna(String poprawna) {
         this.poprawna = poprawna;
     }
@@ -44,8 +42,8 @@ public class QuizQuestion extends AppCompatActivity{
         return pytanie;
     }
 
-    public Odpowiedzi getOdpowiedzi() {
-        return odpowiedz;
+    public String[] getOdpowiedzi() {
+        return odpowiedzi;
     }
 
     public String getPoprawna() {

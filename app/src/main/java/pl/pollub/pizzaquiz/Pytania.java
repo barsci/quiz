@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.ViewAnimator;
 
 import java.util.List;
 
@@ -29,22 +30,12 @@ public class Pytania extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pytania);
 
-        RadioButton[] radioButtonstab = {(RadioButton) findViewById(R.id.rb1),
-                (RadioButton) findViewById(R.id.rb2),
-                (RadioButton) findViewById(R.id.rb3),
-                (RadioButton) findViewById(R.id.rb4)};
-        TextView tvQuestion = (TextView) findViewById(R.id.tv1);
-        TextView tvQuestionNumber = (TextView) findViewById(R.id.textView);
-        ImageView questionPicture = (ImageView) findViewById(R.id.imageView);
-        Button nextQuestion = (Button) findViewById(R.id.button);
-        Button checkQuestion = (Button) findViewById(R.id.button2);
-        RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup2);
-
-        buttonManagement = new ButtonManagement(radioButtonstab, rg, tvQuestionNumber,
-                tvQuestion, questionPicture, nextQuestion, checkQuestion);
+        View view = this.findViewById(android.R.id.content);
+        buttonManagement = new ButtonManagement(view);
         BazaPytan bazaPytan = new BazaPytan();
 
         pytania = bazaPytan.losujPytania(bazaPytan.getListaPytan());
+        buttonManagement.setQuestionNumber("Pytanie nr "+ (nr_pytania+1));
         pytania.get(nr_pytania).wyswietl(buttonManagement);
     }
 
@@ -57,24 +48,17 @@ public class Pytania extends AppCompatActivity {
 
     public void kolejne(View view) {
         nr_pytania++;
-        if (nr_pytania<=9)
-        {
-            buttonManagement.getRadioGroup().clearCheck();
-
-            buttonManagement.getCheckQuestion().setBackgroundColor(Color.LTGRAY);
-
-            nr++;
-            buttonManagement.getQuestionNumber().setText("Pytanie nr "+ nr);
-            if(nr_pytania>=9)
-            {
-                Button button = (Button) findViewById(R.id.button);
-                button.setText("Zakończ");
+        if (nr_pytania<=9) {
+            buttonManagement.clearRadioGroup();
+            buttonManagement.checkButtonColor(Color.LTGRAY);
+            buttonManagement.setQuestionNumber("Pytanie nr "+ (nr_pytania+1));
+            if(nr_pytania>=9) {
+                buttonManagement.setFinalButton();
             }
             pytania.get(nr_pytania).wyswietl(buttonManagement);
             flaga=false;
         }
-        else
-        {
+        else {
             Intent intent =  new Intent(this,Wyniki.class);
             intent.putExtra("wynik",wynik);
             startActivity(intent);
@@ -83,9 +67,7 @@ public class Pytania extends AppCompatActivity {
     }
 
     public boolean sprawdzodp() {
-        RadioButton rb = (RadioButton) findViewById(buttonManagement.getRadioGroup().getCheckedRadioButtonId());
-        String odp = rb.getText().toString();
-        return pytania.get(nr_pytania).sprawdzOdpowiedz(odp);
+        return pytania.get(nr_pytania).sprawdzOdpowiedz(buttonManagement.checkedButtonAnswer());
     }
 
     public void dzwiek(View view) {
@@ -95,13 +77,13 @@ public class Pytania extends AppCompatActivity {
         }
         if (sprawdzodp()) {
             sound = MediaPlayer.create(this,R.raw.dobrze);
-            buttonManagement.getCheckQuestion().setBackgroundColor(Color.GREEN);
+            buttonManagement.checkButtonColor(Color.GREEN);
             wynik++;
             sound.start();
         }
         else {
             sound = MediaPlayer.create(this,R.raw.zle);
-            buttonManagement.getCheckQuestion().setBackgroundColor(Color.RED);
+            buttonManagement.checkButtonColor(Color.RED);
             sound.start();
         }
     }
