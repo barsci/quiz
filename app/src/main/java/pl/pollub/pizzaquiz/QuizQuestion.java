@@ -12,14 +12,13 @@ public class QuizQuestion extends AppCompatActivity{
     private int obrazek;
 
     boolean sprawdzOdpowiedz(String odpowiedz) {
-        return (this.poprawna.equals(odpowiedz));
+        return this.poprawna.equals(odpowiedz);
     }
 
     void wyswietl(ButtonManagement buttonManagement) {
-        for(int i=0;i<4;i++)
-            buttonManagement.getRadioButtonAnswers()[i].setText(this.odpowiedzi[i]);
-        buttonManagement.getQuestionTextView().setText(pytanie);
-        buttonManagement.getQuestionPicture().setImageResource(obrazek);
+        buttonManagement.displayAnswerOnRadioButtons(odpowiedzi);
+        buttonManagement.displayQuestionText(pytanie);
+        buttonManagement.displayQuestionImage(obrazek);
     }
 
     void setPytanie(String pytanie) {
@@ -36,21 +35,5 @@ public class QuizQuestion extends AppCompatActivity{
 
     void setObrazek(int obrazek) {
         this.obrazek = obrazek;
-    }
-
-    public String getPytanie() {
-        return pytanie;
-    }
-
-    public String[] getOdpowiedzi() {
-        return odpowiedzi;
-    }
-
-    public String getPoprawna() {
-        return poprawna;
-    }
-
-    public int getObrazek() {
-        return obrazek;
     }
 }

@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 public final class BazaPytan {
-    private final ArrayList<QuizQuestion> listaPytan = new ArrayList<>();
 
-    public ArrayList<QuizQuestion> getListaPytan() {
+    public static ArrayList<QuizQuestion> getListaPytan() {
+        ArrayList<QuizQuestion> listaPytan = new ArrayList<>();
 
         QuizQuestion pyt1 = new QuizQuestion();
         pyt1.setPytanie("Jakiego ciasta pierwotnie używano do robienia pizzy?");
@@ -140,8 +140,9 @@ public final class BazaPytan {
     return new ArrayList<>(listaPytan);
     }
 
-    public ArrayList<QuizQuestion> losujPytania(ArrayList<QuizQuestion> doLosowania){
+    public static ArrayList<QuizQuestion> losujPytania(){
+        ArrayList<QuizQuestion> doLosowania = getListaPytan();
         Collections.shuffle(doLosowania);
-        return new ArrayList<>(doLosowania);
+        return doLosowania;
     }
 }
